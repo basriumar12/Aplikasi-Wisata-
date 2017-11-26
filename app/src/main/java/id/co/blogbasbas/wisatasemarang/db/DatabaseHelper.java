@@ -27,7 +27,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private final static String LONGITUDE_WISATA = "longitude_wisata";
 
     private final static int DATABASE_VERSION = 1;
-    private static DatabaseHelper instance;
+
+    private static SQLiteDatabase database;
+
 
     //create query table
     private final static String CREATE_TABLE = "CREATE TABLE " + DATABASE_TABLE
@@ -44,11 +46,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public static DatabaseHelper initDatabaseHelper(Context context) {
-        if (instance != null) {
-            return instance;
-        }
 
-        return new DatabaseHelper(context);
+        DatabaseHelper helper = new DatabaseHelper(context);
+        database = helper.getWritableDatabase();
+        return helper;
     }
 
     @Override
@@ -71,8 +72,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                   String deskripsiWisata,
                                   String latWisata,
                                   String longWisata) {
-        //
-        SQLiteDatabase db = instance.getWritableDatabase();
         //untuk memasukan /colom
         ContentValues contentValues = new ContentValues();
         contentValues.put(NAMA_WISATA, namaWisata);
@@ -82,29 +81,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(LATITUDE_WISATA, latWisata);
         contentValues.put(LONGITUDE_WISATA, longWisata);
         //insert data
-        long id = db.insert(DATABASE_TABLE, null, contentValues);
-        db.close();
-        return id;
+        return database.insert(DATABASE_TABLE, null, contentValues);
     }
 
     //menghapus data favorit di sqlite
     public static int delete(String namaWisata) {
-        SQLiteDatabase db = instance.getWritableDatabase();
         String namaKolomnya = NAMA_WISATA + " = ?";
         String[] nilaiFieldnya = {namaWisata};
 
-        return db.delete(DATABASE_TABLE, namaKolomnya, nilaiFieldnya);
+        return database.delete(DATABASE_TABLE, namaKolomnya, nilaiFieldnya);
     }
 
     public static  ArrayList<WisataModel> getDataFavorite() {
         ArrayList<WisataModel> listWisataFavorite = new ArrayList<>();
-        SQLiteDatabase db = instance.getWritableDatabase();
         String[] columnName = {WISATA_ID, NAMA_WISATA, GAMBAR_WISATA, ALAMAT_WISATA, DESKRIPSI_WISATA, LATITUDE_WISATA, LONGITUDE_WISATA};
 
         Cursor kursor = null;
 
         try {
-            kursor = db.query(
+            kursor = database.query(
                     DATABASE_TABLE,
                     columnName,
                     null, null, null, null, null);
@@ -135,7 +130,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } finally {
             if (kursor != null) {
                 kursor.close();
-                db.close();
             }
         }
         return listWisataFavorite;
