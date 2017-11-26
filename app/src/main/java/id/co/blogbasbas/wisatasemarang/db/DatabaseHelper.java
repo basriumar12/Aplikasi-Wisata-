@@ -44,7 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //membaut tabel
+        //membuat tabel
         db.execSQL(CREATE_TABLE);
 
     }
