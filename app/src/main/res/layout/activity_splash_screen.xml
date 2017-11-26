@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="id.co.blogbasbas.wisatasemarang.SplashScreenActivity">
+    <com.wang.avi.AVLoadingIndicatorView
+        android:layout_marginTop="55dp"
+        android:layout_gravity="center"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:indicatorColor="@color/colorPrimary"
+
+        app:indicatorName="LineSpinFadeLoaderIndicator"
+
+        />
+
+
+    <TextView
+    android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wisata Semarang"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+
+
+
+
+
+
+</LinearLayout>
