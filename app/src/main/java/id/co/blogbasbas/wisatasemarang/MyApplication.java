@@ -12,10 +12,10 @@ import id.co.blogbasbas.wisatasemarang.db.DatabaseHelper;
 
 public class MyApplication extends Application {
 
+    DatabaseHelper database = new DatabaseHelper(this);
     @Override
     public void onCreate() {
         super.onCreate();
 
-        DatabaseHelper.initDatabaseHelper(this);
     }
 }

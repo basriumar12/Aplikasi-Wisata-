@@ -3,18 +3,19 @@ package id.co.blogbasbas.wisatasemarang.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import id.co.blogbasbas.wisatasemarang.DetailActivity;
+import id.co.blogbasbas.wisatasemarang.DetailsActivity;
 import id.co.blogbasbas.wisatasemarang.Konstanta;
 import id.co.blogbasbas.wisatasemarang.R;
 import id.co.blogbasbas.wisatasemarang.model.WisataModel;
@@ -47,7 +48,7 @@ public class WisataAdapter extends RecyclerView.Adapter<WisataAdapter.MyHolder>{
     public void onBindViewHolder(WisataAdapter.MyHolder holder, final int position) {
         holder.tv1.setText(listData.get(position).getNamaWisata());
         holder.tv2.setText(listData.get(position).getAlamatWisata());
-        Picasso.with(context).load("https://wisata-smg-basri.000webhostapp.com/wisata_semarang/wisata_semarang/img/wisata/"+listData.get(position).getGambarWisata())
+        Picasso.with(context).load(Konstanta.BASEURL_IMAGE+listData.get(position).getGambarWisata())
                 .placeholder(R.drawable.olele)
                 .error(R.drawable.olele)
                 .into(holder.imageView);
@@ -55,7 +56,7 @@ public class WisataAdapter extends RecyclerView.Adapter<WisataAdapter.MyHolder>{
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent pindah = new Intent(context, DetailActivity.class);
+                Intent pindah = new Intent(context, DetailsActivity.class);
                 Bundle data = new Bundle();
                 data.putString(Konstanta.DATA_ID, listData.get(position).getIdWisata());
                 data.putString(Konstanta.DATA_NAMA, listData.get(position).getNamaWisata());

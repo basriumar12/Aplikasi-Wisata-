@@ -1,8 +1,9 @@
 package id.co.blogbasbas.wisatasemarang.drawroutemap;
 
 import android.os.AsyncTask;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
+
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;

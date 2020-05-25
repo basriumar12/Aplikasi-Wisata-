@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Semarang E-Wisata</string>
+    <string name="app_name">FakFak E-Wisata</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -99,4 +99,5 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_details">DetailsActivity</string>
 </resources>

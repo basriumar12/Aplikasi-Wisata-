@@ -3,9 +3,10 @@ package id.co.blogbasbas.wisatasemarang.kumpulanhelper;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

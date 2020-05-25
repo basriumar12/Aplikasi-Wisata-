@@ -20,4 +20,7 @@ public class Konstanta {
     public static final String DATA_GBR3 = "gambar3";
     public static final String DATA_GBR4 = "gambar4";
     public static String SETTING = "setting";
+    //public static String BASEURL ="http://192.168.0.110//wisata_semarang/wisata/";
+    public static String BASEURL ="http://mic-app.id/wisata_semarang/wisata/";
+    public static String BASEURL_IMAGE ="http://mic-app.id/wisata_semarang/img/wisata/";
 }

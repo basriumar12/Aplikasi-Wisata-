@@ -13,8 +13,7 @@ import id.co.blogbasbas.wisatasemarang.model.WisataModel;
 /**
  * Created by Server on 31/10/2017.
  */
-
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper{
 
     private final static String DATABASE_NAME = "dbwisata";
     private final static String DATABASE_TABLE = "table_wisata";
@@ -27,119 +26,109 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private final static String LONGITUDE_WISATA = "longitude_wisata";
 
     private final static int DATABASE_VERSION = 1;
-    private static DatabaseHelper instance;
+    //query create table
+    private final static String CREATE_TABLE = "CREATE TABLE "+DATABASE_TABLE
+            +" ("+WISATA_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "
+            +NAMA_WISATA+" VARCHAR(200), "
+            +GAMBAR_WISATA+" VARCHAR(200), "
+            +ALAMAT_WISATA+" TEXT, "
+            +DESKRIPSI_WISATA+" TEXT, "
+            +LATITUDE_WISATA+ " VARCHAR(20), "
+            +LONGITUDE_WISATA+ " VARCHAR(20));";
 
-    //create query table
-    private final static String CREATE_TABLE = "CREATE TABLE " + DATABASE_TABLE
-            + " (" + WISATA_ID + " INTEGER  PRIMARY KEY AUTOINCREMENT, "
-            + NAMA_WISATA + " VARCHAR(200), "
-            + GAMBAR_WISATA + " VARCHAR(200), "
-            + ALAMAT_WISATA + " TEXT, "
-            + DESKRIPSI_WISATA + " TEXT, "
-            + LATITUDE_WISATA + " VARCHAR(20), "
-            + LONGITUDE_WISATA + " VARCHAR(20));";
-
-    private DatabaseHelper(Context context) {
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    public static DatabaseHelper initDatabaseHelper(Context context) {
-        if (instance != null) {
-            return instance;
-        }
-
-        return new DatabaseHelper(context);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //membuat tabel
         db.execSQL(CREATE_TABLE);
-
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+DATABASE_TABLE);
         onCreate(db);
-
     }
 
-    public static long insertData(String namaWisata,
-                                  String gambarWisata,
-                                  String alamatWisata,
-                                  String deskripsiWisata,
-                                  String latWisata,
-                                  String longWisata) {
-        //
-        SQLiteDatabase db = instance.getWritableDatabase();
-        //untuk memasukan /colom
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(NAMA_WISATA, namaWisata);
-        contentValues.put(GAMBAR_WISATA, gambarWisata);
-        contentValues.put(ALAMAT_WISATA, alamatWisata);
-        contentValues.put(DESKRIPSI_WISATA, deskripsiWisata);
-        contentValues.put(LATITUDE_WISATA, latWisata);
-        contentValues.put(LONGITUDE_WISATA, longWisata);
-        //insert data
-        long id = db.insert(DATABASE_TABLE, null, contentValues);
+    //DML
+    //CRUD
+
+    //insert data
+    public long insertData(String namaWisata, String gambarWisata, String alamatWisata, String deskripsiWisata, String latWisata, String longWisata){
+        //kalau gagal <= 0
+        // kalau berhasil > 0
+        //saat insert kita dapat id
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(NAMA_WISATA, namaWisata);
+        cv.put(GAMBAR_WISATA, gambarWisata);
+        cv.put(ALAMAT_WISATA, alamatWisata);
+        cv.put(DESKRIPSI_WISATA, deskripsiWisata);
+        cv.put(LATITUDE_WISATA, latWisata);
+        cv.put(LONGITUDE_WISATA, longWisata);
+        long id = db.insert(DATABASE_TABLE, null, cv);
         db.close();
         return id;
     }
 
-    //menghapus data favorit di sqlite
-    public static int delete(String namaWisata) {
-        SQLiteDatabase db = instance.getWritableDatabase();
-        String namaKolomnya = NAMA_WISATA + " = ?";
-        String[] nilaiFieldnya = {namaWisata};
+    //menghapus data favorite di SQLite
+    public long delete(String namaWisata){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String namaKolom = NAMA_WISATA + " = ?";
+        String [] isikolom = {namaWisata};
 
-        return db.delete(DATABASE_TABLE, namaKolomnya, nilaiFieldnya);
+        int count = db.delete(DATABASE_TABLE,namaKolom,isikolom);
+        db.close();
+        return count;
     }
 
-    public static  ArrayList<WisataModel> getDataFavorite() {
+
+    public ArrayList<WisataModel> getDataFavorite() {
         ArrayList<WisataModel> listWisataFavorite = new ArrayList<>();
-        SQLiteDatabase db = instance.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         String[] columnName = {WISATA_ID, NAMA_WISATA, GAMBAR_WISATA, ALAMAT_WISATA, DESKRIPSI_WISATA, LATITUDE_WISATA, LONGITUDE_WISATA};
+        Cursor kursor = db.query(
+                DATABASE_TABLE,
+                columnName,
+                null, null, null, null, null);
+        if (kursor != null) {
+            while (kursor.moveToNext()) {
+                int idWisata = kursor.getInt(kursor.getColumnIndex(WISATA_ID));
+                String namaWisata = kursor.getString(kursor.getColumnIndex(NAMA_WISATA));
+                String gambarWisata = kursor.getString(kursor.getColumnIndex(GAMBAR_WISATA));
+                String alamatWisata = kursor.getString(kursor.getColumnIndex(ALAMAT_WISATA));
+                String deskripsiWisata = kursor.getString(kursor.getColumnIndex(DESKRIPSI_WISATA));
+                String latWisata = kursor.getString(kursor.getColumnIndex(LATITUDE_WISATA));
+                String longWisata = kursor.getString(kursor.getColumnIndex(LONGITUDE_WISATA));
 
-        Cursor kursor = null;
+                WisataModel wisataFavorite = new WisataModel();
+                wisataFavorite.setIdWisata(String.valueOf(idWisata));
+                wisataFavorite.setNamaWisata(namaWisata);
+                wisataFavorite.setGambarWisata(gambarWisata);
+                wisataFavorite.setAlamatWisata(alamatWisata);
+                wisataFavorite.setDeksripsiWisata(deskripsiWisata);
+                wisataFavorite.setLatitudeWisata(latWisata);
+                wisataFavorite.setLongitudeWisata(longWisata);
 
-        try {
-            kursor = db.query(
-                    DATABASE_TABLE,
-                    columnName,
-                    null, null, null, null, null);
-            if (kursor != null) {
-                while (kursor.moveToNext()) {
-                    int idWisata = kursor.getInt(kursor.getColumnIndex(WISATA_ID));
-                    String namaWisata = kursor.getString(kursor.getColumnIndex(NAMA_WISATA));
-                    String gambarWisata = kursor.getString(kursor.getColumnIndex(GAMBAR_WISATA));
-                    String alamatWisata = kursor.getString(kursor.getColumnIndex(ALAMAT_WISATA));
-                    String deskripsiWisata = kursor.getString(kursor.getColumnIndex(DESKRIPSI_WISATA));
-                    String latWisata = kursor.getString(kursor.getColumnIndex(LATITUDE_WISATA));
-                    String longWisata = kursor.getString(kursor.getColumnIndex(LONGITUDE_WISATA));
-
-                    WisataModel wisataFavorite = new WisataModel();
-                    wisataFavorite.setIdWisata(String.valueOf(idWisata));
-                    wisataFavorite.setNamaWisata(namaWisata);
-                    wisataFavorite.setGambarWisata(gambarWisata);
-                    wisataFavorite.setAlamatWisata(alamatWisata);
-                    wisataFavorite.setDeksripsiWisata(deskripsiWisata);
-                    wisataFavorite.setLatitudeWisata(latWisata);
-                    wisataFavorite.setLongitudeWisata(longWisata);
-
-                    listWisataFavorite.add(wisataFavorite);
-                }
-            }
-        } catch (Exception e) {
-            return new ArrayList<>();
-        } finally {
-            if (kursor != null) {
-                kursor.close();
-                db.close();
+                listWisataFavorite.add(wisataFavorite);
             }
         }
+
+        db.close();
         return listWisataFavorite;
     }
 
+
+
+//    public long delete0(int idWisata){
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        String namaKolom = WISATA_ID + " = ?";
+//        String [] isikolom = {String.valueOf(idWisata)};
+//
+//        int count = db.delete(DATABASE_TABLE,namaKolom,isikolom);
+//        db.close();
+//        return count;
+//    }
 
 }

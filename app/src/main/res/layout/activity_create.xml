@@ -27,7 +27,7 @@
             android:scaleType="centerInside"
             android:src="@drawable/ic_wisataa" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout_deskripsi"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -45,9 +45,9 @@
                 android:inputType="textCapSentences|textMultiLine"
                 android:textColor="@android:color/black"
                 android:textColorHint="@android:color/black" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout_nama"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,14 +59,14 @@
                 android:id="@+id/edt_nama"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="10dp"
                 android:drawablePadding="16dp"
                 android:hint="Judul Wisata"
                 android:textColor="@android:color/black"
                 android:textColorHint="@android:color/black" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout_alamat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -78,15 +78,15 @@
                 android:id="@+id/edt_alamat"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="10dp"
                 android:drawablePadding="16dp"
                 android:hint="Alamat Wisata"
                 android:inputType="textCapSentences|textMultiLine"
                 android:textColor="@android:color/black"
                 android:textColorHint="@android:color/black" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout_event"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -98,13 +98,13 @@
                 android:id="@+id/edt_event"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="10dp"
                 android:drawablePadding="16dp"
                 android:hint="Event Wisata"
                 android:inputType="textCapSentences|textMultiLine"
                 android:textColor="@android:color/black"
                 android:textColorHint="@android:color/black" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -133,5 +133,11 @@
             android:background="@color/colorAccent"
             android:text="Submit"
             android:textColor="@android:color/white" />
+        <ProgressBar
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:id="@+id/progress_circular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </ScrollView>
