@@ -1,5 +1,6 @@
 package id.co.blogbasbas.wisatasemarang;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -12,15 +13,35 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import id.co.blogbasbas.wisatasemarang.adapter.WisataAdapter;
+import id.co.blogbasbas.wisatasemarang.adapter.WisataAdapterDetail;
 import id.co.blogbasbas.wisatasemarang.db.DatabaseHelper;
+import id.co.blogbasbas.wisatasemarang.model.ListWisataModel;
+import id.co.blogbasbas.wisatasemarang.model.WisataModel;
+import id.co.blogbasbas.wisatasemarang.network.ApiServices;
+import id.co.blogbasbas.wisatasemarang.network.RetrofitConfig;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.content.ContentValues.TAG;
 
 public class DetailsActivity extends AppCompatActivity {
     private static final String TAG = "DetailWisataActivity";
@@ -48,6 +69,13 @@ public class DetailsActivity extends AppCompatActivity {
     String gambar3;
     String gambar4;
     DatabaseHelper database = new DatabaseHelper(this);
+
+    RecyclerView recyclerView;
+    ArrayList<WisataModel> listData;
+    Context context;
+    RecyclerView.LayoutManager layoutManager;
+    ProgressBar pd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,11 +88,12 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
         initView();
+        ambilData();
 
         //tangkap data
         Bundle data = getIntent().getExtras();
 
-        if (data != null){
+        if (data != null) {
             idWisata = data.getString(Konstanta.DATA_ID);
             namaWisata = data.getString(Konstanta.DATA_NAMA);
             gambarWisata = data.getString(Konstanta.DATA_GAMBAR);
@@ -88,22 +117,7 @@ public class DetailsActivity extends AppCompatActivity {
                 .load(Konstanta.BASEURL_IMAGE + gambarWisata)
                 .apply(new RequestOptions().placeholder(R.drawable.olele).error(R.drawable.olele))
                 .into(ivDetailGambar);
-        Glide.with(this)
-                .load(Konstanta.BASEURL_IMAGE + gambar2)
-                .apply(new RequestOptions().placeholder(R.drawable.olele).error(R.drawable.olele))
-                .into(img2);
-        Glide.with(this)
-                .load(Konstanta.BASEURL_IMAGE + gambar3)
-                .apply(new RequestOptions().placeholder(R.drawable.olele).error(R.drawable.olele))
-                .into(img3);
-        Glide.with(this)
-                .load(Konstanta.BASEURL_IMAGE+ gambar4)
-                .apply(new RequestOptions().placeholder(R.drawable.olele).error(R.drawable.olele))
-                .into(img4);
-        Glide.with(this)
-                .load(Konstanta.BASEURL_IMAGE + gambar1)
-                .apply(new RequestOptions().placeholder(R.drawable.olele).error(R.drawable.olele))
-                .into(img1);
+
 
         //preferences
         pref = getSharedPreferences(Konstanta.SETTING, MODE_PRIVATE);
@@ -117,7 +131,7 @@ public class DetailsActivity extends AppCompatActivity {
                 //simpan favorit ke pref
                 if (isFavorit) {
                     // isFavorit = false;
-                    long del =database.delete(namaWisata);
+                    long del = database.delete(namaWisata);
 
                     Log.d(TAG, "id kembali: " + del);
                     if (del <= 0) {
@@ -181,10 +195,15 @@ public class DetailsActivity extends AppCompatActivity {
         tvDetailDeskripsi = findViewById(R.id.tv_detail_deskripsi);
         tvDetailAlamat = findViewById(R.id.tv_detail_alamat);
         fab = findViewById(R.id.fab);
-        img1 = findViewById(R.id.img1);
-        img2 = findViewById(R.id.img2);
-        img3 = findViewById(R.id.img3);
-        img4 = findViewById(R.id.img4);
+        recyclerView = (RecyclerView) findViewById(R.id.rv_detail);
+
+        pd = (ProgressBar) findViewById(R.id.pd);
+        listData = new ArrayList<>();
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(DetailsActivity.this,
+                LinearLayoutManager.HORIZONTAL, false));
+
+
     }
 
     @Override
@@ -193,6 +212,40 @@ public class DetailsActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_detail, menu);
         return super.onCreateOptionsMenu(menu);
 
+    }
+
+    private void ambilData() {
+        pd.setVisibility(View.VISIBLE);
+
+        ApiServices api = RetrofitConfig.getApiServices();
+        Call<ListWisataModel> call = api.ambilDataWisata();
+        call.enqueue(new Callback<ListWisataModel>() {
+            @Override
+            public void onResponse(Call<ListWisataModel> call, Response<ListWisataModel> response) {
+                pd.setVisibility(View.GONE);
+                if (response.isSuccessful()) {
+                    if (response.body().getSuccess().toString().equals("true")) {
+                        listData = response.body().getWisata();
+                        WisataAdapterDetail adapter = new WisataAdapterDetail(listData, DetailsActivity.this);
+                        recyclerView.setAdapter(adapter);
+
+                        //ngetes data di log
+                        for (int i = 0; i < listData.size(); i++) {
+                            Log.d(TAG, "onResponse: " + listData.get(i).getGambarWisata());
+                        }
+                    } else {
+                        Toast.makeText(DetailsActivity.this, response.body().getMessage().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(DetailsActivity.this, "Respones is Not Succesfull", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ListWisataModel> call, Throwable t) {
+                Toast.makeText(DetailsActivity.this, "Response Failure", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

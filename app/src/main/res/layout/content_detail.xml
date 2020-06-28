@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="id.co.blogbasbas.wisatasemarang.DetailActivity"
+
     tools:showIn="@layout/activity_detail">
 
     <LinearLayout
@@ -31,63 +31,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp">
 
-            <HorizontalScrollView
-                android:id="@+id/slider"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:ignore="UselessParent">
+                android:layout_height="220dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Wisata Rekomendasi" />
+
+                <ProgressBar
+
+                    android:id="@+id/pd"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_detail"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:measureWithLargestChild="false"
-                    android:orientation="horizontal">
+                    android:layout_margin="10dp" />
 
-                    <ImageView
-
-                        android:id="@+id/img1"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:scaleType="fitXY"
-                        android:contentDescription="TODO" />
-
-                    <ImageView
-                        android:id="@+id/img2"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:scaleType="fitXY" />
-
-                    <ImageView
-                        android:id="@+id/img3"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:scaleType="fitXY" />
-
-                    <ImageView
-                        android:id="@+id/img4"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:scaleType="fitXY" />
-
-
-                </LinearLayout>
-            </HorizontalScrollView>
-
-        </LinearLayout>
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
