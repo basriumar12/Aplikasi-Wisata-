@@ -17,7 +17,7 @@
         <ImageView
             android:id="@+id/imgWisata"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:scaleType="fitXY" />
 
         <TextView
@@ -34,7 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="7dp"
-            android:text="Ket " />
+            android:text="Ket "
+            android:maxLength="25"/>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
