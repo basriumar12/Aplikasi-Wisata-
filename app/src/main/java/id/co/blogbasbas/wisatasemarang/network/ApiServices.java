@@ -3,10 +3,13 @@ package id.co.blogbasbas.wisatasemarang.network;
 
 import id.co.blogbasbas.wisatasemarang.model.ListWisataModel;
 import id.co.blogbasbas.wisatasemarang.model.ResponseBody;
+import id.co.blogbasbas.wisatasemarang.model.TransactionDto;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -31,4 +34,8 @@ public interface ApiServices {
                                      @Part("latitude_wisata") RequestBody latitude_wisata,
                                      @Part("alamat_wisata") RequestBody alamat_wisata);
 
+
+
+    @GET("pending")
+    Call<TransactionDto> getData(@Header("Authorization")String token);
 }
