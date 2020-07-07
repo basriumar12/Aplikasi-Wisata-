@@ -139,11 +139,11 @@ public class MainActivity extends AppCompatActivity
 
             startActivity(new Intent(MainActivity.this, MapsActivity.class));
 
-
-            FragmentManager manager = getSupportFragmentManager();
-            getSupportActionBar().setTitle(" Peta ");
-
-            manager.beginTransaction().replace(R.id.layoutFragment,new MapFragment()).commit();
+//
+//            FragmentManager manager = getSupportFragmentManager();
+//            getSupportActionBar().setTitle(" Peta ");
+//
+//            manager.beginTransaction().replace(R.id.layoutFragment,new MapFragment()).commit();
 
         } else if (id == R.id.nav_tambah) {
            startActivity(new Intent(MainActivity.this, AboutActivity.class));

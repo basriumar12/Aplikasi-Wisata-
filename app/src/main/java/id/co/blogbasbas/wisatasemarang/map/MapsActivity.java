@@ -40,9 +40,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
+        final Object mf = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        if (mf instanceof SupportMapFragment) {
+            final SupportMapFragment smf = (SupportMapFragment) mf;
+            smf.getMapAsync(this);
+            // ...
+        } else {
+            finish();
+            Toast.makeText(this, "Tidak Support", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -94,15 +101,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                              lng = Double.valueOf(listData.get(i).getLongitudeWisata());
                              lat = Double.valueOf(listData.get(i).getLatitudeWisata());
+                            try {
+                                LatLng sydney = new LatLng(lat, lng);
+                                mMap.addMarker(new MarkerOptions().position(sydney).title(listData.get(i).getNamaWisata())
+                                        .snippet(listData.get(i).getAlamatWisata()));
+                            } catch (Exception e){
 
-                            LatLng sydney = new LatLng(lat,lng);
-                            mMap.addMarker(new MarkerOptions().position(sydney).title(listData.get(i).getNamaWisata())
-                                    .snippet(listData.get(i).getAlamatWisata()));
-
-
-
-                            String TAG ="aaa";
-                            Log.d(TAG, "onResponse: " + listData.get(i).getGambarWisata());
+                            }
                         }
                     } else {
                         //Toast.makeText(this, response.body().getMessage().toString(), Toast.LENGTH_SHORT).show();

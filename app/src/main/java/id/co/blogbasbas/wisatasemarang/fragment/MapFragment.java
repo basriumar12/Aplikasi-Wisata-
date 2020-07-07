@@ -166,16 +166,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void ambilData() {
         final ProgressDialog progress = new ProgressDialog(getActivity());
-        progress.setTitle("Loading");
-        progress.setMessage("Mohon Bersabar");
-        progress.show();
 
         ApiServices api = RetrofitConfig.getApiServices();
         Call<ListWisataModel> call = api.ambilDataWisata();
         call.enqueue(new Callback<ListWisataModel>() {
             @Override
             public void onResponse(Call<ListWisataModel> call, Response<ListWisataModel> response) {
-                progress.hide();
+
                 if (response.isSuccessful()){
                     if(response.body().getSuccess().toString().equals("true")){
                         listData = response.body().getWisata();
