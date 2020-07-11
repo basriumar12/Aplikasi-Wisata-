@@ -16,7 +16,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
+        <ProgressBar
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:id="@+id/progress_circular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
@@ -26,6 +31,49 @@
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
             android:src="@drawable/ic_wisataa" />
+
+        <EditText
+            android:text="Klik ambil gambar 1"
+            android:id="@+id/edt_satu"
+            android:editable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:text="Klik ambil gambar 2"
+            android:id="@+id/edt_dua"
+            android:editable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:text="Klik ambil gambar 3"
+            android:id="@+id/edt_tiga"
+            android:editable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:text="Klik ambil gambar 4"
+            android:id="@+id/edt_empat"
+            android:editable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_nama"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/black">
+
+            <EditText
+                android:id="@+id/edt_nama"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:drawablePadding="16dp"
+                android:hint="Judul Wisata"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout_deskripsi"
@@ -47,24 +95,6 @@
                 android:textColorHint="@android:color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout_nama"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:textColor="@android:color/black"
-            android:textColorHint="@android:color/black">
-
-            <EditText
-                android:id="@+id/edt_nama"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:drawablePadding="16dp"
-                android:hint="Judul Wisata"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/black" />
-        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout_alamat"
@@ -133,11 +163,7 @@
             android:background="@color/colorAccent"
             android:text="Submit"
             android:textColor="@android:color/white" />
-        <ProgressBar
-            android:visibility="gone"
-            android:layout_gravity="center"
-            android:id="@+id/progress_circular"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+
+
     </LinearLayout>
 </ScrollView>

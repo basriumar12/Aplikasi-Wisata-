@@ -61,7 +61,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-places:17.0.0'
     //library easy permission
-    implementation 'pub.devrel:easypermissions:1.0.1'
+    implementation 'pub.devrel:easypermissions:3.0.0'
     // implementation 'com.github.ar-android:DrawRouteMaps:1.0.0'
     implementation 'com.squareup.okhttp3:okhttp:3.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
@@ -76,7 +76,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'id.zelory:compressor:2.1.0'
-    implementation "com.karumi:dexter:6.0.0"
+    implementation "com.karumi:dexter:6.2.0"
 }
 repositories {
     mavenCentral()

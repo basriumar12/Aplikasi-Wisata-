@@ -25,17 +25,31 @@ public interface ApiServices {
     //input data
     @Multipart
     @POST("create_wisata.php")
-    Call<ResponseBody> CREATE_WISATA(@Part MultipartBody.Part file,
+    Call<ResponseBody> CREATE_WISATA(
+
+            //@Part MultipartBody.Part file,
                                      @Part("nama_wisata") RequestBody nama_wisata,
                                      @Part("gambar_wisata") RequestBody gambar_wisata,
                                      @Part("deksripsi_wisata") RequestBody deksripsi_wisata,
                                      @Part("event_wisata") RequestBody event_wisata,
                                      @Part("longitude_wisata") RequestBody longitude_wisata,
                                      @Part("latitude_wisata") RequestBody latitude_wisata,
-                                     @Part("alamat_wisata") RequestBody alamat_wisata);
+                                     @Part("alamat_wisata") RequestBody alamat_wisata,
+                                     @Part("gambar1") RequestBody gambar1,
+                                     @Part("gambar2") RequestBody gambar2,
+                                     @Part("gambar3") RequestBody gambar3
+
+
+    );
+
+    @Multipart
+    @POST("add_foto.php")
+    Call<ResponseBody> CREATE_FOTO(@Part MultipartBody.Part file,
+                                   @Part("nama_foto") RequestBody gambar_wisata
+
+
+    );
 
 
 
-    @GET("pending")
-    Call<TransactionDto> getData(@Header("Authorization")String token);
 }

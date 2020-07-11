@@ -62,6 +62,9 @@ class CreateActivity : MyFunction(), PermissionCallbacks, View.OnClickListener {
     var btnSubmit: Button? = null
     var loading: ProgressDialog? = null
     var easyImage: EasyImage? = null
+    var fileFoto = 0
+
+
     var path: File? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +78,24 @@ class CreateActivity : MyFunction(), PermissionCallbacks, View.OnClickListener {
         btnMaps = findViewById(R.id.btn_maps)
         btnSubmit = findViewById(R.id.btn_submit)
 
-        initPermission()
+        Dexter.withActivity(this).withPermissions(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                        report?.let {
+
+                        }
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                            permissions: MutableList<PermissionRequest>?,
+                            token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
+                }).check()
         btn_submit.setOnClickListener {
             submitData()
         }
@@ -90,16 +110,92 @@ class CreateActivity : MyFunction(), PermissionCallbacks, View.OnClickListener {
             }
         }
 
-        imageView?.setOnClickListener {
+        edt_empat?.setOnClickListener {
+           initPermission()
             openGallery()
-
+            fileFoto = 4
 
 
         }
 
+        edt_satu.setOnClickListener {
+            initPermission()
+            openGallery()
+            fileFoto = 1
+        }
+        edt_dua.setOnClickListener {
+            openGallery()
+            fileFoto = 2
+        }
+        edt_tiga.setOnClickListener {
+            openGallery()
+            fileFoto = 3
+        }
+
     }
 
+    fun uploadFoto() {
+        val file = File(path?.toURI())
+        //ngasih nama gambar
+        val namaGambar = file.name
+        val sFile = RequestBody.create(MediaType.parse("image/*"), file)
+        val fileToUpload = MultipartBody.Part.createFormData("file", namaGambar, sFile)
+        val sgambar = RequestBody.create(MediaType.parse("text/plain"), namaGambar)
+
+        //tampilkan loading
+
+        progress_circular.visibility = View.VISIBLE
+        //persiapan service
+        val api = RetrofitConfig.apiServices
+        api.CREATE_FOTO(
+                fileToUpload,
+                sgambar
+
+        ).enqueue(object : Callback<id.co.blogbasbas.wisatasemarang.model.ResponseBody> {
+            override fun onResponse(call: Call<id.co.blogbasbas.wisatasemarang.model.ResponseBody>, response: Response<id.co.blogbasbas.wisatasemarang.model.ResponseBody>) {
+                if (response.isSuccessful) {
+                    progress_circular.visibility = View.GONE
+
+                    try {
+
+                        if (response.body()?.success?.equals(true)!!) {
+                            Log.e(TAG, "onResponse: ")
+                            val builder = AlertDialog.Builder(this@CreateActivity)
+                            builder.setTitle("Sukses Upload gambar")
+                            builder.setMessage("Gambar $fileFoto Sukses  di upload")
+                            builder.setPositiveButton("OK") { dialog, id ->
+                                dialog.dismiss()
+
+                            }
+                            builder.create().show()
+                        } else {
+                            MyToast("gambar sudah tersedia")
+                        }
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        MyToast("gagal 1 $e")
+                        Log.e(TAG, "gagal upload : $e")
+                    } catch (e: IOException) {
+                        MyToast("gagal 2 $e")
+                        e.printStackTrace()
+                    }
+                } else {
+                    MyToast("Not Succesfull$response")
+                }
+            }
+
+            override fun onFailure(call: Call<id.co.blogbasbas.wisatasemarang.model.ResponseBody>, t: Throwable) {
+                MyToast("Gagal Failure$t")
+                Log.e("TAG", "error ${t.message}")
+                progress_circular.visibility = View.GONE
+
+            }
+        })
+    }
+
+
     private fun initPermission() {
+
         Dexter.withActivity(this).withPermissions(
                 Manifest.permission.CAMERA,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -119,41 +215,55 @@ class CreateActivity : MyFunction(), PermissionCallbacks, View.OnClickListener {
                         token?.continuePermissionRequest()
                     }
                 }).check()
-
     }
 
-    fun submitData(){
+    fun submitData() {
         //ambil data
         val nama: String
         val deskripsi: String
         val alamat: String
         val event: String
+
         nama = edtNama!!.text.toString()
         alamat = edtAlamat!!.text.toString()
         deskripsi = edtDeskripsi!!.text.toString()
         event = edtEvent!!.text.toString()
+        val namaGambar1 = edt_satu.text.toString()
+        val namaGambar2 = edt_dua.text.toString()
+        val namaGambar3 = edt_tiga.text.toString()
+        val namaGambar4 = edt_empat.text.toString()
         //cek jika kosong
-        if (TextUtils.isEmpty(nama) ||
+        if (
+                TextUtils.isEmpty(nama) ||
                 TextUtils.isEmpty(alamat) ||
                 TextUtils.isEmpty(deskripsi) ||
                 TextUtils.isEmpty(event) ||
                 TextUtils.isEmpty(lat) ||
-                TextUtils.isEmpty(lng) || uri == null) {
+                TextUtils.isEmpty(lng) ||
+                TextUtils.isEmpty(namaGambar1) ||
+                TextUtils.isEmpty(namaGambar2) ||
+                TextUtils.isEmpty(namaGambar3) ||
+                TextUtils.isEmpty(namaGambar4)
+        //uri == null
+
+        ) {
             MyToast("belum diisi")
         } else { //dapetin path gambar yg dipilih
 
             val file = File(path?.toURI())
             //ngasih nama gambar
             val namaGambar = file.name
-            Log.e("TAG","nama gambar $namaGambar")
-            Log.e("TAG","nama path ${path.toString()}")
+
             val sFile = RequestBody.create(MediaType.parse("image/*"), file)
             val fileToUpload = MultipartBody.Part.createFormData("file", namaGambar, sFile)
             val sNama = RequestBody.create(MediaType.parse("text/plain"), nama)
             val sdeskripsi = RequestBody.create(MediaType.parse("text/plain"), deskripsi)
             val sevent = RequestBody.create(MediaType.parse("text/plain"), event)
             val salamat = RequestBody.create(MediaType.parse("text/plain"), alamat)
-            val sgambar = RequestBody.create(MediaType.parse("text/plain"), namaGambar)
+            val sgambar1 = RequestBody.create(MediaType.parse("text/plain"), namaGambar1)
+            val sgambar2 = RequestBody.create(MediaType.parse("text/plain"), namaGambar2)
+            val sgambar3 = RequestBody.create(MediaType.parse("text/plain"), namaGambar3)
+            val sgambar4 = RequestBody.create(MediaType.parse("text/plain"), namaGambar4)
             val slat = RequestBody.create(MediaType.parse("text/plain"), lng)
             val slng = RequestBody.create(MediaType.parse("text/plain"), lat)
             //tampilkan loading
@@ -161,14 +271,17 @@ class CreateActivity : MyFunction(), PermissionCallbacks, View.OnClickListener {
             //persiapan service
             val api = RetrofitConfig.apiServices
             api.CREATE_WISATA(
-                    fileToUpload,
+                    //fileToUpload,
                     sNama,
-                    sgambar,
+                    sgambar1,
                     sdeskripsi,
                     sevent,
                     slat,
                     slng,
-                    salamat
+                    salamat,
+                    sgambar2,
+                    sgambar3,
+                    sgambar4
             ).enqueue(object : Callback<id.co.blogbasbas.wisatasemarang.model.ResponseBody> {
                 override fun onResponse(call: Call<id.co.blogbasbas.wisatasemarang.model.ResponseBody>, response: Response<id.co.blogbasbas.wisatasemarang.model.ResponseBody>) {
                     if (response.isSuccessful) {
@@ -207,13 +320,14 @@ class CreateActivity : MyFunction(), PermissionCallbacks, View.OnClickListener {
 
                 override fun onFailure(call: Call<id.co.blogbasbas.wisatasemarang.model.ResponseBody>, t: Throwable) {
                     MyToast("Gagal Failure$t")
-                    Log.e("TAG","error ${t.message}")
+                    Log.e("TAG", "error ${t.message}")
                     progress_circular.visibility = View.GONE
 
                 }
             })
         }
     }
+
     private val OPERATION_CHOOSE_PHOTO = 2
     private fun openGallery() {
 
@@ -228,6 +342,7 @@ class CreateActivity : MyFunction(), PermissionCallbacks, View.OnClickListener {
     var uri: Uri? = null
     var lat: String? = null
     var lng: String? = null
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == OPERATION_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK && data != null) {
@@ -311,7 +426,28 @@ class CreateActivity : MyFunction(), PermissionCallbacks, View.OnClickListener {
                 .compressToFile(file)
         path = compressedImage
         imageView?.let { Glide.with(this).load(compressedImage).into(it) }
-        Log.e("tag","path ${path.toString()}")
+        val files = File(path?.toURI())
+        val namaGambar = files.name
+
+        when (fileFoto) {
+            1 -> {
+                edt_satu.setText(namaGambar)
+                uploadFoto()
+            }
+            2 -> {
+                edt_dua.setText(namaGambar)
+                uploadFoto()
+            }
+            3 -> {
+                edt_tiga.setText(namaGambar)
+                uploadFoto()
+            }
+            4 -> {
+                edt_empat.setText(namaGambar)
+                uploadFoto()
+            }
+
+        }
 
     }
 
