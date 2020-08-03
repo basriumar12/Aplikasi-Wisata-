@@ -4,8 +4,10 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Aplikasi-Wisata-.iml" filepath="$PROJECT_DIR$/.idea/modules/Aplikasi-Wisata-.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/Aplikasi-Wisata--app.iml" filepath="$PROJECT_DIR$/app/Aplikasi-Wisata--app.iml" group="Aplikasi-Wisata-/app" />
+      <module fileurl="file://$PROJECT_DIR$/Desktop-freelance_projek-Aplikasi-Wisata-.iml" filepath="$PROJECT_DIR$/Desktop-freelance_projek-Aplikasi-Wisata-.iml" group="Aplikasi-Wisata-" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/freelance_projek-Aplikasi-Wisata-.iml" filepath="$PROJECT_DIR$/freelance_projek-Aplikasi-Wisata-.iml" group="Aplikasi-Wisata-" />
+      <module fileurl="file://$PROJECT_DIR$/app/freelance_projek-Aplikasi-Wisata--app.iml" filepath="$PROJECT_DIR$/app/freelance_projek-Aplikasi-Wisata--app.iml" group="Aplikasi-Wisata-/app" />
     </modules>
   </component>
 </project>
